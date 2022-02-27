@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Momentum</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="script">
+           <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, target-densitydpi=medium-dpi">
+        <script src="https://kit.fontawesome.com/8a95f2a77a.js" crossorigin="anonymous"></script>
+        
+</head>
+<body>
+    <header>
+        <h1>
+            <div class="inbox">
+            <form><input type="text" placeholder="주군의 성명을 적으세요."></form>
+            <i class="fas fa-redo"></i>
+            </div>
+        </h1>
+        <div class="timecover">현 재 시 각
+            <div class="res_time">
+                <span class="s0">00</span> 시 
+                <span class="s1">00</span> 분 
+                <span class="s2">00</span> 초
+            </div>
+        </div>
+    </header>
+    <form class="todo_Form"><input type="text" placeholder="오늘의 명령을(0~9)?"></form>
+    <ul class="todo">
+    </ul>
+    <div class="weather_Box">
+        <div class="weather_memo"><span>날 씨</span>
+            
+        </div>
+    
+    <div class="weather"><div class="weather_0"></div>
+        <div class="weather_1"></div>
+        <div class="weather_2"></div>
+        <div class="weather_3"></div>
+        <ul class="weather_Etc">즐겨찾기 <li class="busan">부산 </li>
+       <li class="seoul">서울 </li>
+       <li class="jeju">제주도 </li>
+       <li class="current_spot">@ </li>
+   </ul></div>
+    
+      
+    </div>
+ 
+<script src="JS/jquery-3.4.1.min.js"></script>
+<script src="JS/jquery-ui.js"></script>
+    <script>
+        if(localStorage.getItem('localTodo')==null){
+        var a2 = [];
+        localStorage.setItem('localTodo',JSON.stringify(a2));}
+var res_hour = document.querySelector('.res_time .s0'),
+      res_min = document.querySelector('.res_time .s1'),
+      res_sec = document.querySelector('.res_time .s2'),
+      res_time = document.querySelector('.res_time');
+     
+        var now = new Date(); 
+        var hour = now.getHours(); 
+        var min = now.getMinutes();
+        var sec = now.getSeconds(); //console.dir(now)
+  
+
+ 
+console.log(now,hour,min,sec);
+
+timecheck()
+function timecheck(){
+        var now = new Date(); 
+        var hour = now.getHours(); 
+        var min = now.getMinutes();
+        var sec = now.getSeconds(); 
+    document.querySelector('.s0').innerText = hour;
+    document.querySelector('.s1').innerText = min;
+    document.querySelector('.s2').innerText = sec;
+    } 
+setInterval(timecheck,500); 
+//        window.onload = function () {       //  새로고침 검색.
+////        $(document).ready(function(){@@@@})    이런것도 있군
+////    ==    $(function(){@@@@})    로도 쓸수있음
+        
+function background(){
+     var newdiv = document.createElement("div"),
+         header = document.querySelector('header'),
+         now = new Date(),
+         hour = now.getHours(),
+         nextext;
+    if(hour>5 && hour<=11){ 
+       newtext = "아침 평정 시간입니다."; 
+
+    }else if(hour>11 && hour<=16){ 
+        newtext = "오후 군략을 정해주십시오"; 
+         
+    }else if(hour>17 && hour<=20){ 
+        newtext ="야간 작전을 준비중입니다."; 
+           
+    }else{ 
+        newtext ="그럭저럭 잘 잠입한 모양입니다.";
+    }
+            
+            newdiv.append(newtext);
+            newdiv.classList.add("line2"); document.querySelector('h1').append(newdiv);
+    
+            var temp0 = (Math.random()*100)%11;
+            temp0 = parseInt(temp0);
+            header.style.backgroundImage = 'url(images/sam3/unnamed'+temp0+'.jpg)';
+} 
+    background();    
+        var h1 = document.querySelector('h1'),
+            h1inbox = h1.querySelector('.inbox'),
+            jsform = h1inbox.querySelector('form'),
+            inbox = document.querySelector('.inbox'),
+            inboxforminput = inbox.querySelector('input'), 
+            inboxi = document.querySelector('.inbox i'),
+            todo_Form = document.querySelector('.todo_Form'),
+            todo_Input = todo_Form.querySelector('input'),
+            todo = document.querySelector('.todo'),
+            todoli = todo.querySelectorAll('li');
+ 
+        var res_History = localStorage.getItem('name');
+        if(res_History != null){
+            jsform.innerText = res_History +'님, 잘 돌아왔습니다.';  
+        }else{
+            jsform.addEventListener('submit',function(e){
+            e.preventDefault;
+            var res_Input = inboxforminput.value;
+            localStorage.setItem('name',res_Input);
+            alert(res_Input+'님, 잘 돌아왔습니다.'); 
+        })}
+        
+        inboxi.addEventListener('click',function(){
+            var res_Input = prompt("군주명을 입력하세요.")
+            localStorage.setItem('name',res_Input); 
+            location.reload();
+        });
+        
+        
+        
+        
+        
+        var  todo_Arr=[];
+        var LOCALTODO = 'localTodo';
+        var lc_todo = localStorage.getItem(LOCALTODO);   var loads = JSON.parse(lc_todo); 
+        
+        
+        function writeTodo(){
+             LOCALTODO = 'localTodo';
+             lc_todo = localStorage.getItem(LOCALTODO);
+            var loads = JSON.parse(lc_todo);
+            todo.innerHTML="";
+            console.log(lc_todo)
+            for(var i = 0; i<loads.length;i++){
+                
+                var newli = document.createElement("li"); 
+                var newtext = loads[i];
+                newli.append(newtext);
+                todo.append(newli);
+                
+            } 
+            todoli = todo.querySelectorAll('li');
+        
+        for(var i = 0; i<todo.childElementCount;i++){
+            
+        todoli[i].addEventListener('click',function(e){                                          
+            if(this.className=='on'){
+                
+            var res_li = e.currentTarget; 
+//            var temp_index = this.
+            var res_text = res_li.innerHTML;  
+            console.log(res_text);
+            var res_text2 = loads.indexOf(res_text);
+            var removedItem = loads.splice(res_text2,1);  
+           
+             todo_Arr = loads;     
+            localStorage.setItem('localTodo',JSON.stringify(loads)); 
+            res_li.style.display="none";
+//            todoli[i].style.display="none";
+            }
+             
+            
+            if(this.className=='on'){
+                
+                
+                
+             
+            this.classList.toggle("on");
+            
+            }else{  
+            this.classList.toggle("on");
+            var todolion = document.querySelector('.todo .on'); 
+            }
+            
+        })
+           }  
+        }
+        function saveTodo(e){
+         e.preventDefault();
+         var todo_Arr=[];     
+         var res_Todo = todo_Input.value;
+         todo_Arr.push(res_Todo);
+         var LOCALTODO = 'localTodo';
+         var lc_todo = localStorage.getItem(LOCALTODO);
+         var loads = JSON.parse(lc_todo);
+            
+         for(var i = 0;i<loads.length;i++){
+         todo_Arr.push(loads[i]);   
+                }
+            console.log(loads,todo_Arr);
+         todo_Input.value = '';
+         var changeJson = JSON.stringify(todo_Arr);  
+         console.log(changeJson);
+         localStorage.setItem(LOCALTODO,changeJson);
+        
+        writeTodo();                         
+       };
+    
+    function loadTodo(){
+        var lc_todo = localStorage.getItem(LOCALTODO);    
+        var loads = JSON.parse(lc_todo);
+        writeTodo(); 
+       
+    }
+    todo_Form.addEventListener('submit',saveTodo);   
+    if(lc_todo != null){
+            loadTodo();
+    }
+    function weather_tool(){
+        var weather_Box = document.querySelector('.weather_Box'),
+            weather = document.querySelector('.weather'),
+            weather_memo = weather_Box.querySelector('.weather_memo');
+            console.log(weather)
+        
+            weather.addEventListener('click',function(){
+                
+            if(weather.classList.contains('on')){
+            weather.setAttribute( "style",
+    "position: fixed;    top: -120px;    left: 0px;    width: 100%;    height:100px;    background-color: red;transition: all 1s;");
+            weather.classList.remove('on');
+          console.dir(weather)}})
+         
+        weather_memo.addEventListener('click',function(){
+              console.dir(weather)
+            weather.setAttribute( "style",
+    "position: fixed;top: 0px;    left: 0;    width: 100%;    height:100px;    background-color: red;    transition: all 2s;");
+            weather.classList.add('on');
+        })
+        
+    }
+    weather_tool();     
+        var 
+            weather_0 = document.querySelector(".weather_0"),
+            weather_1 = document.querySelector(".weather_1"),
+            weather_2 = document.querySelector(".weather_2"),
+            weather_3 = document.querySelector(".weather_3"),
+            busan_local = document.querySelector(".busan"),
+            seoul_local = document.querySelector(".seoul"),
+            jeju_local = document.querySelector(".jeju"),
+            current_local = document.querySelector(".current_spot");
+        const API_KEY = 'cd7e21cfdd2d1d9544430e157810d37c';
+        
+        function printWeather(lon,lat){
+             let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+            
+       // `` 백틱? 자바스크립트 표현식을 ${}안에 바로 넣을수있다. 이게 편해서 그리씀.
+//let url = `https://api.openweathermap.org/data/2.5/weather?id={city id}&appid={API_KEY}`
+            
+            
+
+           
+            fetch(url).then(function (load){ return load.json()}).then(function(item){
+                //유알엘 정해 놓은데 연결하고. 난 후에 then 로드를 펑션하는데 그건 리턴값을 제이슨화 하고. 난후에 then 아이템이란 펑션을 해보자.
+                console.log(item);
+                console.dir(item);
+                weather_0.innerHTML=("도시명 "+item.name);
+                weather_1.innerHTML=("위도 "+item.coord.lat+"경도 "+item.coord.lon);
+                weather_2.innerHTML=("평균 온도 "+item.main.temp); 
+                weather_3.innerHTML=("기상  "+item.weather[0].main+' ('+item.weather[0].description+')'); 
+            }); 
+        }
+        function success(information){
+            
+            let coords = {
+            lon :  information.coords.longitude,
+            lat : information.coords.latitude
+            }
+             busan_local.addEventListener("click",function(){
+                
+              printWeather(129,35);
+               
+             })
+             seoul_local.addEventListener("click",function(){
+                
+              printWeather(126.97806,37.56667);
+               
+             })
+             jeju_local.addEventListener("click",function(){
+                
+              printWeather(126.51667,33.5);
+               
+             })
+             current_local.addEventListener("click",function(){
+                
+               printWeather(coords.lon, coords.lat);
+               
+             })
+            printWeather(coords.lon, coords.lat);
+            
+        }
+        
+
+        function failed(error){console.log(error);
+                              alert("에러 "+console.log(error)+"를 확인하세요.")}
+        
+        navigator.geolocation.getCurrentPosition(success,failed);
+    </script> 
+</body>
+</html>
